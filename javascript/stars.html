@@ -21,15 +21,18 @@
 	canvas.height = canvas.offsetHeight;
 	var ctx = canvas.getContext("2d");
 
-	var speed = 50;
+	var speed = 80;
 	var pixelSize = 3;
 	var starDensity = 0.003;
 
 	// init layer
-	var layer1 = initLayer("#EEE");
-	var layer2 = initLayer("#AAA");
-	var layer3 = initLayer("#888");
-	var layer4 = initLayer("#555");
+	var layers = [
+		initLayer("#FFF"),
+		initLayer("#CCC"),
+		initLayer("#999"),
+		initLayer("#777"),
+		initLayer("#444")
+	];
 
 	function initLayer(color) {
 		var layer = [];
@@ -53,22 +56,24 @@
 		ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
 	}
 
-	function drawLayer(layer, step) {
+	function drawLayer(layer, shiftRight) {
 		for (n = 0; n < layer.length; n++) {
 			var point = layer[n];
-			point.x = point.x < canvas.width / pixelSize ? point.x + step: 0;
+			point.x = point.x < canvas.width / pixelSize ? point.x + (shiftRight ? 1 : 0): 0;
 			drawPixel(point.x, point.y, point.color);
 		}
 	}
 
-   	var startX = 0;
+   	var step = 0;
 	function draw() {
     	ctx.clearRect(0, 0, canvas.width, canvas.height);
     	ctx.beginPath();
-    	drawLayer(layer1, 4);
-    	drawLayer(layer2, 3);
-    	drawLayer(layer3, 2);
-    	drawLayer(layer4, 1);
+
+    	for (var n = 0; n < layers.length; n++) {
+    		drawLayer(layers[n], step % (n+1) == 0);
+    	}
+    	step++;
+
 		ctx.closePath();
 	}
 	setInterval(draw, 100 - speed);
