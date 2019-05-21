@@ -22,7 +22,7 @@
 	var ctx = canvas.getContext("2d");
 
 	var speed = 80;
-	var pixelSize = 3;
+	var pixelSize = 2;
 	var starDensity = 0.003;
 
 	// init layer
@@ -69,7 +69,7 @@
     	ctx.clearRect(0, 0, canvas.width, canvas.height);
     	ctx.beginPath();
 
-    	for (var n = 0; n < layers.length; n++) {
+    	for (var n = layers.length-1; n >= 0; n--) {
     		drawLayer(layers[n], step % (n+1) == 0);
     	}
     	step++;
