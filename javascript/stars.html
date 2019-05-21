@@ -4,12 +4,13 @@
     <meta charset="utf-8" />
     <title>scroller</title>
     <style>
+    	body { background: #000 }
     	* { padding: 0; margin: 0; }
     	canvas { background: #000; display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
-<canvas id="canvas" width="1024" height="500" style="padding-top: 10px; padding-bottom: 10px"></canvas>
+<canvas id="canvas" style="padding-top: 10px; padding-bottom: 10px"></canvas>
 <div id="info"></div>
 
 <script>
@@ -17,15 +18,15 @@
 	var info = document.getElementById("info");
 	canvas.style.width ='100%';
 	canvas.style.height='100%';
-  	canvas.width  = canvas.offsetWidth;
-	canvas.height = canvas.offsetHeight;
+  	canvas.width  = window.innerWidth;
+	canvas.height = window.innerHeight;
 	var ctx = canvas.getContext("2d");
 
-	var speed = 80;
+	var speed = 90;
 	var pixelSize = 2;
-	var starDensity = 0.003;
+	var starDensity = 0.001;
 
-	// init layer
+	// create layers
 	var layers = [
 		initLayer("#FFF"),
 		initLayer("#CCC"),
