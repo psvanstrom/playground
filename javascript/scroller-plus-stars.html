@@ -130,7 +130,7 @@
 	// scroll properties
 	var text = "scroller by svanstrom@gmail.com";
 	var fillColor = "#FF0"
-	var scrollPixelSize = 10;
+	var scrollPixelSize = 20;
 	var pixelSpacing = 4;
 	var amplitude = 70;
     var frequency = 100;
@@ -166,15 +166,17 @@
 		return layer;
 	}
 
-	function drawSinPixel(x, y, enabled) {
-		ctx.fillStyle = enabled ? fillColor : "#000";
+	function drawSinPixel(x, y) {
+		ctx.fillStyle = fillColor;
 		ctx.fillRect(x, y + amplitude * Math.sin((where+x)/frequency), scrollPixelSize, scrollPixelSize);
 	}
 
 	function writeCharacter(charIndex, posX, posY) {
 		for (y = 0; y < 8; y++) {
 			for (x = 0; x < 8; x++) {
-				drawSinPixel(x * totalPixelWidth + posX, y * totalPixelWidth + posY, letters[charIndex][y] & (1 << x)); 
+				if (letters[charIndex][y] & (1 << x)) {
+					drawSinPixel(x * totalPixelWidth + posX, y * totalPixelWidth + posY);
+				}
 			}
 		}
 	}
