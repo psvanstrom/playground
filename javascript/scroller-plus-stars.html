@@ -113,7 +113,7 @@
 	    [ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]    // U+007F
 	]
 
-
+	// set up canvas
 	var canvas = document.getElementById("canvas");
 	var info = document.getElementById("info");
 	canvas.style.width ='100%';
@@ -123,24 +123,25 @@
 	var ctx = canvas.getContext("2d");
 
 	// star properties
-	var speed = 95;
-	var pixelSize = 4;
+	var speed = 85;
+	var starPixelSize = 2;
 	var starDensity = 0.0009;
 
 	// scroll properties
-	var text = "Signe och Ture";
-	var fillColor = "#FF0"
-	var scrollPixelSize = 10;
-	var pixelSpacing = 4;
+	var text = "https://github.com/psvanstrom/playground";
+	var scrollPixelSize = 8;
+	var pixelSpacing = 2;
 	var amplitude = 70;
-    var frequency = 100;
+    var frequency = 170;
     var startY = canvas.height / 2 - 4 * scrollPixelSize;
+	var textColor = ctx.createLinearGradient(0, startY - amplitude, 0, startY + 4 * scrollPixelSize + amplitude);
+	textColor.addColorStop(0, 'darkgreen');
+	textColor.addColorStop(1, 'lightgreen');  
 
 	var totalPixelWidth = scrollPixelSize + pixelSpacing;
 	var where = canvas.width;
 
-
-	// create layers
+	// create star layers
 	var layers = [
 		initLayer("#FFF"),
 		initLayer("#CCC"),
@@ -152,8 +153,8 @@
 	function initLayer(color) {
 		var layer = [];
 		var idx = 0;
-		for (x = 0; x < canvas.width / pixelSize; x++) {
-			for (y = 0; y < canvas.height / pixelSize; y++) {
+		for (x = 0; x < canvas.width / starPixelSize; x++) {
+			for (y = 0; y < canvas.height / starPixelSize; y++) {
 				if (Math.random() >= 1 - starDensity) {
 					layer[idx++] = {
 						"x": x,
@@ -166,16 +167,19 @@
 		return layer;
 	}
 
-	function drawSinPixel(x, y) {
+	function drawPixel(x, y, pixelSize, fillColor) {
 		ctx.fillStyle = fillColor;
-		ctx.fillRect(x, y + amplitude * Math.sin((where+x)/frequency), scrollPixelSize, scrollPixelSize);
+		ctx.fillRect(x, y, pixelSize, pixelSize);
 	}
 
 	function writeCharacter(charIndex, posX, posY) {
 		for (y = 0; y < 8; y++) {
 			for (x = 0; x < 8; x++) {
 				if (letters[charIndex][y] & (1 << x)) {
-					drawSinPixel(x * totalPixelWidth + posX, y * totalPixelWidth + posY);
+					var calcX = x * totalPixelWidth + posX;
+					var calcY = y * totalPixelWidth + posY;
+					var sin = amplitude * Math.sin((where + calcX) / frequency);
+					drawPixel(calcX, calcY + sin, scrollPixelSize, textColor);
 				}
 			}
 		}
@@ -187,17 +191,11 @@
 		}
 	}
 
-
-	function drawPixel(x, y, fillColor) {
-		ctx.fillStyle = fillColor;
-		ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-	}
-
 	function drawLayer(layer, shiftRight) {
 		for (n = 0; n < layer.length; n++) {
 			var point = layer[n];
-			point.x = point.x < canvas.width / pixelSize ? point.x + (shiftRight ? 1 : 0): 0;
-			drawPixel(point.x, point.y, point.color);
+			point.x = point.x < canvas.width / starPixelSize ? point.x + (shiftRight ? 1 : 0): 0;
+			drawPixel(point.x  * starPixelSize, point.y * starPixelSize, starPixelSize, point.color);
 		}
 	}
 
@@ -212,7 +210,7 @@
     	step++;
 
 		writeString(text, where, startY);
-		where--;
+		where = where - 2;
 		if (where < -text.length * 8 * totalPixelWidth - 20) {
 			where = canvas.width;
 		}
