@@ -123,21 +123,21 @@
 	var ctx = canvas.getContext("2d");
 
 	// star properties
-	var speed = 100;
-	var pixelSize = 2;
+	var speed = 95;
+	var pixelSize = 4;
 	var starDensity = 0.0009;
 
 	// scroll properties
-	var text = "scroller by svanstrom@gmail.com";
+	var text = "Signe och Ture";
 	var fillColor = "#FF0"
-	var scrollPixelSize = 20;
+	var scrollPixelSize = 10;
 	var pixelSpacing = 4;
 	var amplitude = 70;
     var frequency = 100;
     var startY = canvas.height / 2 - 4 * scrollPixelSize;
 
 	var totalPixelWidth = scrollPixelSize + pixelSpacing;
-	var where = -text.length * 8 * totalPixelWidth - 20;
+	var where = canvas.width;
 
 
 	// create layers
@@ -212,9 +212,9 @@
     	step++;
 
 		writeString(text, where, startY);
-		where++;
-		if (where > canvas.width) {
-			where = -text.length * 8 * totalPixelWidth - 20;
+		where--;
+		if (where < -text.length * 8 * totalPixelWidth - 20) {
+			where = canvas.width;
 		}
 
 		ctx.closePath();

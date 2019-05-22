@@ -130,7 +130,7 @@
     var startY = amplitude;
 
 	var totalPixelWidth = pixelSize + pixelSpacing;
-	var where = -text.length * 8 * totalPixelWidth - 20;
+	var where = canvas.width;
 
 	function drawPixel(x, y, enabled) {
 		ctx.fillStyle = enabled ? fillColor : "#FFF";
@@ -155,9 +155,9 @@
     	ctx.clearRect(0, 0, canvas.width, canvas.height);
     	ctx.beginPath();
 		writeString(text, where, startY);
-		where++;
-		if (where > canvas.width) {
-			where = -text.length * 8 * totalPixelWidth - 20;
+		where--;
+		if (where < -text.length * 8 * totalPixelWidth - 20) {
+			where = canvas.width;
 		}
 		ctx.closePath();
 	}
